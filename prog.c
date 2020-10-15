@@ -32,6 +32,7 @@ char **get_input(char *input) {
     int index = 0;
     int index2 = 0;
 
+    //RECUPERAMOS EL ULTIMO COMANDO COLOCADO EN NUESTRO SHELL
       if(strcmp(input,"!!") == 0)
         {
           //printf("%s\n", history[ultiE - 1]);
@@ -63,7 +64,7 @@ char **get_input(char *input) {
     //REDIRECCIONAR >
 
     parsed2 = strtok(input2, separator2);
-
+    //SOLO SEPARAMOS POR PARTES EL STRING PARA RECONOCER LOS COMANDOS
     while (parsed2 != NULL) {
         argv3[index2] = parsed2;
         index2++;
@@ -72,6 +73,7 @@ char **get_input(char *input) {
 
     argv3[index2] = NULL;
 
+  //PARA CREAR LOS FLUJOS O LOS COMANDOS EN EL TXT, CON EL OPERADOR > 
     strcpy(input2,argv3[0]);
     if(index2 >= 2 && strcmp(argv3[1],">") == 0)
         {
@@ -92,6 +94,7 @@ char **get_input(char *input) {
             dup2(out,STDOUT_FILENO);
             //printf("%s\n","sali"); 
         }
+    //RECUPERAR LOS COMANDOS QUE ESTAN GUARDADOS EN EL COMANDO DE <
     else if(index2 >= 2 && strcmp(argv3[1],"<") == 0)
         {
             printf("%s\n","ENTRE");
@@ -99,6 +102,7 @@ char **get_input(char *input) {
             strcat(input," ");
             strcat(input,argv3[2]);           
         }  
+    //FUNCIO PARA PODER HACER KILL CON EL STOP Y CON CONTINUE
     else if(strcmp(argv3[0],"stopp") == 0)
     {
         int pids = atoi(argv3[1]);
@@ -117,6 +121,7 @@ char **get_input(char *input) {
 
     parsed = strtok(input, separator);
 
+    //SEPARAMOS LAS INSTRUCCIONES POR PARTES COMO LO SOLICITA EL LIBRO
     while (parsed != NULL) {
         argv2[index] = parsed;
         index++;
@@ -125,6 +130,7 @@ char **get_input(char *input) {
 
     argv2[index] = NULL;
 
+    //SI EL PRIMER ELEMENTO DEL ARREGLO DE COMANDOS ES H SIGNIFICA MOSTRAR EL HISTORIAL Y MOSTRAMOS NUESTRO INSTORIAL
     if(strcmp(argv2[0],"h") == 0)
         {
             int i;
@@ -134,6 +140,7 @@ char **get_input(char *input) {
               printf("%s\n",history[i]);
             }
         }
+    //SI NO SOLO DEVOLVEMOS LOS ARGUMENTOS
     return argv2;
 }
 
@@ -155,7 +162,8 @@ int main(void)
             fflush(stdout);
             inputString = readline("");
             argv = get_input(inputString);
-            
+            //OBTENEMOS O RECUPERAMOS LAS INSTRUCCION DE NUESTRO STRING DADO EN CONSOLA
+
             if (!argv[0]) 
             {   
               free(inputString);
@@ -163,6 +171,7 @@ int main(void)
               continue;
             }
 
+            //EJECUTAMOS EL PROCESO EN EL HIJO
             pid = fork();
             if(pid == 0)
             {
